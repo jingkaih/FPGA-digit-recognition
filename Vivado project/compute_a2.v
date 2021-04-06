@@ -1,0 +1,590 @@
+`timescale 1ns / 1ps
+
+
+
+module compute_a2(
+    clk, rst_n, run_EN, a1, a2, a2_compute_Done
+    );
+
+    input clk;
+    input rst_n;
+    input run_EN;//enable computing impulse. This should be connected to "compute_a1.a1_compute_Done" in higher level module
+
+
+    output reg [511:0] a2;//a1 is a 512 bits long vector, 1 is 1, 0 is -1
+    output reg a2_compute_Done;//compute done
+
+    input [511:0] a1;//a1 should be connected to "compute_a1" in higher level module
+
+    
+    reg [9:0] addra;//addra ranges from 0 to 511
+    wire [511:0] one_row;
+
+
+    rom_w2_transpose w2_weights(
+        .clka(clk),
+        .addra(addra),
+        .douta(one_row)
+    );
+
+    reg addra_add_EN;
+    always @(posedge clk, negedge rst_n) begin
+        if(!rst_n)
+            addra_add_EN <= 0;
+        else if(run_EN)
+            addra_add_EN <= 1;
+        else if(addra == 513)//511
+            addra_add_EN <= 0;
+        else
+            addra_add_EN <= addra_add_EN;
+    end
+    always @(posedge clk, negedge rst_n) begin
+        if(!rst_n)
+            addra <= 0;
+        else if(addra_add_EN)
+            addra <= addra + 1;
+        else if(addra == 513)//511
+            addra <= 0;
+        else
+            addra <= 0;
+    end
+
+    wire dot_product_0_1;
+    XNOR_popcount#(.WIDTH(512)) XNOR_popcount_inst(//
+        .row_vector(one_row),
+        .col_vector(a1),
+        .dot_product_0_1(dot_product_0_1)
+    );
+
+    always @(posedge clk, negedge rst_n) begin
+        if(!rst_n)
+            a2 <= 0;
+        else if(addra_add_EN) begin
+            case (addra)
+
+                0,1,2 : a2[ 511 ] <= dot_product_0_1;
+                3 : a2[ 510 ] <= dot_product_0_1;
+                4 : a2[ 509 ] <= dot_product_0_1;
+                5 : a2[ 508 ] <= dot_product_0_1;
+                6 : a2[ 507 ] <= dot_product_0_1;
+                7 : a2[ 506 ] <= dot_product_0_1;
+                8 : a2[ 505 ] <= dot_product_0_1;
+                9 : a2[ 504 ] <= dot_product_0_1;
+                10 : a2[ 503 ] <= dot_product_0_1;
+                11 : a2[ 502 ] <= dot_product_0_1;
+                12 : a2[ 501 ] <= dot_product_0_1;
+                13 : a2[ 500 ] <= dot_product_0_1;
+                14 : a2[ 499 ] <= dot_product_0_1;
+                15 : a2[ 498 ] <= dot_product_0_1;
+                16 : a2[ 497 ] <= dot_product_0_1;
+                17 : a2[ 496 ] <= dot_product_0_1;
+                18 : a2[ 495 ] <= dot_product_0_1;
+                19 : a2[ 494 ] <= dot_product_0_1;
+                20 : a2[ 493 ] <= dot_product_0_1;
+                21 : a2[ 492 ] <= dot_product_0_1;
+                22 : a2[ 491 ] <= dot_product_0_1;
+                23 : a2[ 490 ] <= dot_product_0_1;
+                24 : a2[ 489 ] <= dot_product_0_1;
+                25 : a2[ 488 ] <= dot_product_0_1;
+                26 : a2[ 487 ] <= dot_product_0_1;
+                27 : a2[ 486 ] <= dot_product_0_1;
+                28 : a2[ 485 ] <= dot_product_0_1;
+                29 : a2[ 484 ] <= dot_product_0_1;
+                30 : a2[ 483 ] <= dot_product_0_1;
+                31 : a2[ 482 ] <= dot_product_0_1;
+                32 : a2[ 481 ] <= dot_product_0_1;
+                33 : a2[ 480 ] <= dot_product_0_1;
+                34 : a2[ 479 ] <= dot_product_0_1;
+                35 : a2[ 478 ] <= dot_product_0_1;
+                36 : a2[ 477 ] <= dot_product_0_1;
+                37 : a2[ 476 ] <= dot_product_0_1;
+                38 : a2[ 475 ] <= dot_product_0_1;
+                39 : a2[ 474 ] <= dot_product_0_1;
+                40 : a2[ 473 ] <= dot_product_0_1;
+                41 : a2[ 472 ] <= dot_product_0_1;
+                42 : a2[ 471 ] <= dot_product_0_1;
+                43 : a2[ 470 ] <= dot_product_0_1;
+                44 : a2[ 469 ] <= dot_product_0_1;
+                45 : a2[ 468 ] <= dot_product_0_1;
+                46 : a2[ 467 ] <= dot_product_0_1;
+                47 : a2[ 466 ] <= dot_product_0_1;
+                48 : a2[ 465 ] <= dot_product_0_1;
+                49 : a2[ 464 ] <= dot_product_0_1;
+                50 : a2[ 463 ] <= dot_product_0_1;
+                51 : a2[ 462 ] <= dot_product_0_1;
+                52 : a2[ 461 ] <= dot_product_0_1;
+                53 : a2[ 460 ] <= dot_product_0_1;
+                54 : a2[ 459 ] <= dot_product_0_1;
+                55 : a2[ 458 ] <= dot_product_0_1;
+                56 : a2[ 457 ] <= dot_product_0_1;
+                57 : a2[ 456 ] <= dot_product_0_1;
+                58 : a2[ 455 ] <= dot_product_0_1;
+                59 : a2[ 454 ] <= dot_product_0_1;
+                60 : a2[ 453 ] <= dot_product_0_1;
+                61 : a2[ 452 ] <= dot_product_0_1;
+                62 : a2[ 451 ] <= dot_product_0_1;
+                63 : a2[ 450 ] <= dot_product_0_1;
+                64 : a2[ 449 ] <= dot_product_0_1;
+                65 : a2[ 448 ] <= dot_product_0_1;
+                66 : a2[ 447 ] <= dot_product_0_1;
+                67 : a2[ 446 ] <= dot_product_0_1;
+                68 : a2[ 445 ] <= dot_product_0_1;
+                69 : a2[ 444 ] <= dot_product_0_1;
+                70 : a2[ 443 ] <= dot_product_0_1;
+                71 : a2[ 442 ] <= dot_product_0_1;
+                72 : a2[ 441 ] <= dot_product_0_1;
+                73 : a2[ 440 ] <= dot_product_0_1;
+                74 : a2[ 439 ] <= dot_product_0_1;
+                75 : a2[ 438 ] <= dot_product_0_1;
+                76 : a2[ 437 ] <= dot_product_0_1;
+                77 : a2[ 436 ] <= dot_product_0_1;
+                78 : a2[ 435 ] <= dot_product_0_1;
+                79 : a2[ 434 ] <= dot_product_0_1;
+                80 : a2[ 433 ] <= dot_product_0_1;
+                81 : a2[ 432 ] <= dot_product_0_1;
+                82 : a2[ 431 ] <= dot_product_0_1;
+                83 : a2[ 430 ] <= dot_product_0_1;
+                84 : a2[ 429 ] <= dot_product_0_1;
+                85 : a2[ 428 ] <= dot_product_0_1;
+                86 : a2[ 427 ] <= dot_product_0_1;
+                87 : a2[ 426 ] <= dot_product_0_1;
+                88 : a2[ 425 ] <= dot_product_0_1;
+                89 : a2[ 424 ] <= dot_product_0_1;
+                90 : a2[ 423 ] <= dot_product_0_1;
+                91 : a2[ 422 ] <= dot_product_0_1;
+                92 : a2[ 421 ] <= dot_product_0_1;
+                93 : a2[ 420 ] <= dot_product_0_1;
+                94 : a2[ 419 ] <= dot_product_0_1;
+                95 : a2[ 418 ] <= dot_product_0_1;
+                96 : a2[ 417 ] <= dot_product_0_1;
+                97 : a2[ 416 ] <= dot_product_0_1;
+                98 : a2[ 415 ] <= dot_product_0_1;
+                99 : a2[ 414 ] <= dot_product_0_1;
+                100 : a2[ 413 ] <= dot_product_0_1;
+                101 : a2[ 412 ] <= dot_product_0_1;
+                102 : a2[ 411 ] <= dot_product_0_1;
+                103 : a2[ 410 ] <= dot_product_0_1;
+                104 : a2[ 409 ] <= dot_product_0_1;
+                105 : a2[ 408 ] <= dot_product_0_1;
+                106 : a2[ 407 ] <= dot_product_0_1;
+                107 : a2[ 406 ] <= dot_product_0_1;
+                108 : a2[ 405 ] <= dot_product_0_1;
+                109 : a2[ 404 ] <= dot_product_0_1;
+                110 : a2[ 403 ] <= dot_product_0_1;
+                111 : a2[ 402 ] <= dot_product_0_1;
+                112 : a2[ 401 ] <= dot_product_0_1;
+                113 : a2[ 400 ] <= dot_product_0_1;
+                114 : a2[ 399 ] <= dot_product_0_1;
+                115 : a2[ 398 ] <= dot_product_0_1;
+                116 : a2[ 397 ] <= dot_product_0_1;
+                117 : a2[ 396 ] <= dot_product_0_1;
+                118 : a2[ 395 ] <= dot_product_0_1;
+                119 : a2[ 394 ] <= dot_product_0_1;
+                120 : a2[ 393 ] <= dot_product_0_1;
+                121 : a2[ 392 ] <= dot_product_0_1;
+                122 : a2[ 391 ] <= dot_product_0_1;
+                123 : a2[ 390 ] <= dot_product_0_1;
+                124 : a2[ 389 ] <= dot_product_0_1;
+                125 : a2[ 388 ] <= dot_product_0_1;
+                126 : a2[ 387 ] <= dot_product_0_1;
+                127 : a2[ 386 ] <= dot_product_0_1;
+                128 : a2[ 385 ] <= dot_product_0_1;
+                129 : a2[ 384 ] <= dot_product_0_1;
+                130 : a2[ 383 ] <= dot_product_0_1;
+                131 : a2[ 382 ] <= dot_product_0_1;
+                132 : a2[ 381 ] <= dot_product_0_1;
+                133 : a2[ 380 ] <= dot_product_0_1;
+                134 : a2[ 379 ] <= dot_product_0_1;
+                135 : a2[ 378 ] <= dot_product_0_1;
+                136 : a2[ 377 ] <= dot_product_0_1;
+                137 : a2[ 376 ] <= dot_product_0_1;
+                138 : a2[ 375 ] <= dot_product_0_1;
+                139 : a2[ 374 ] <= dot_product_0_1;
+                140 : a2[ 373 ] <= dot_product_0_1;
+                141 : a2[ 372 ] <= dot_product_0_1;
+                142 : a2[ 371 ] <= dot_product_0_1;
+                143 : a2[ 370 ] <= dot_product_0_1;
+                144 : a2[ 369 ] <= dot_product_0_1;
+                145 : a2[ 368 ] <= dot_product_0_1;
+                146 : a2[ 367 ] <= dot_product_0_1;
+                147 : a2[ 366 ] <= dot_product_0_1;
+                148 : a2[ 365 ] <= dot_product_0_1;
+                149 : a2[ 364 ] <= dot_product_0_1;
+                150 : a2[ 363 ] <= dot_product_0_1;
+                151 : a2[ 362 ] <= dot_product_0_1;
+                152 : a2[ 361 ] <= dot_product_0_1;
+                153 : a2[ 360 ] <= dot_product_0_1;
+                154 : a2[ 359 ] <= dot_product_0_1;
+                155 : a2[ 358 ] <= dot_product_0_1;
+                156 : a2[ 357 ] <= dot_product_0_1;
+                157 : a2[ 356 ] <= dot_product_0_1;
+                158 : a2[ 355 ] <= dot_product_0_1;
+                159 : a2[ 354 ] <= dot_product_0_1;
+                160 : a2[ 353 ] <= dot_product_0_1;
+                161 : a2[ 352 ] <= dot_product_0_1;
+                162 : a2[ 351 ] <= dot_product_0_1;
+                163 : a2[ 350 ] <= dot_product_0_1;
+                164 : a2[ 349 ] <= dot_product_0_1;
+                165 : a2[ 348 ] <= dot_product_0_1;
+                166 : a2[ 347 ] <= dot_product_0_1;
+                167 : a2[ 346 ] <= dot_product_0_1;
+                168 : a2[ 345 ] <= dot_product_0_1;
+                169 : a2[ 344 ] <= dot_product_0_1;
+                170 : a2[ 343 ] <= dot_product_0_1;
+                171 : a2[ 342 ] <= dot_product_0_1;
+                172 : a2[ 341 ] <= dot_product_0_1;
+                173 : a2[ 340 ] <= dot_product_0_1;
+                174 : a2[ 339 ] <= dot_product_0_1;
+                175 : a2[ 338 ] <= dot_product_0_1;
+                176 : a2[ 337 ] <= dot_product_0_1;
+                177 : a2[ 336 ] <= dot_product_0_1;
+                178 : a2[ 335 ] <= dot_product_0_1;
+                179 : a2[ 334 ] <= dot_product_0_1;
+                180 : a2[ 333 ] <= dot_product_0_1;
+                181 : a2[ 332 ] <= dot_product_0_1;
+                182 : a2[ 331 ] <= dot_product_0_1;
+                183 : a2[ 330 ] <= dot_product_0_1;
+                184 : a2[ 329 ] <= dot_product_0_1;
+                185 : a2[ 328 ] <= dot_product_0_1;
+                186 : a2[ 327 ] <= dot_product_0_1;
+                187 : a2[ 326 ] <= dot_product_0_1;
+                188 : a2[ 325 ] <= dot_product_0_1;
+                189 : a2[ 324 ] <= dot_product_0_1;
+                190 : a2[ 323 ] <= dot_product_0_1;
+                191 : a2[ 322 ] <= dot_product_0_1;
+                192 : a2[ 321 ] <= dot_product_0_1;
+                193 : a2[ 320 ] <= dot_product_0_1;
+                194 : a2[ 319 ] <= dot_product_0_1;
+                195 : a2[ 318 ] <= dot_product_0_1;
+                196 : a2[ 317 ] <= dot_product_0_1;
+                197 : a2[ 316 ] <= dot_product_0_1;
+                198 : a2[ 315 ] <= dot_product_0_1;
+                199 : a2[ 314 ] <= dot_product_0_1;
+                200 : a2[ 313 ] <= dot_product_0_1;
+                201 : a2[ 312 ] <= dot_product_0_1;
+                202 : a2[ 311 ] <= dot_product_0_1;
+                203 : a2[ 310 ] <= dot_product_0_1;
+                204 : a2[ 309 ] <= dot_product_0_1;
+                205 : a2[ 308 ] <= dot_product_0_1;
+                206 : a2[ 307 ] <= dot_product_0_1;
+                207 : a2[ 306 ] <= dot_product_0_1;
+                208 : a2[ 305 ] <= dot_product_0_1;
+                209 : a2[ 304 ] <= dot_product_0_1;
+                210 : a2[ 303 ] <= dot_product_0_1;
+                211 : a2[ 302 ] <= dot_product_0_1;
+                212 : a2[ 301 ] <= dot_product_0_1;
+                213 : a2[ 300 ] <= dot_product_0_1;
+                214 : a2[ 299 ] <= dot_product_0_1;
+                215 : a2[ 298 ] <= dot_product_0_1;
+                216 : a2[ 297 ] <= dot_product_0_1;
+                217 : a2[ 296 ] <= dot_product_0_1;
+                218 : a2[ 295 ] <= dot_product_0_1;
+                219 : a2[ 294 ] <= dot_product_0_1;
+                220 : a2[ 293 ] <= dot_product_0_1;
+                221 : a2[ 292 ] <= dot_product_0_1;
+                222 : a2[ 291 ] <= dot_product_0_1;
+                223 : a2[ 290 ] <= dot_product_0_1;
+                224 : a2[ 289 ] <= dot_product_0_1;
+                225 : a2[ 288 ] <= dot_product_0_1;
+                226 : a2[ 287 ] <= dot_product_0_1;
+                227 : a2[ 286 ] <= dot_product_0_1;
+                228 : a2[ 285 ] <= dot_product_0_1;
+                229 : a2[ 284 ] <= dot_product_0_1;
+                230 : a2[ 283 ] <= dot_product_0_1;
+                231 : a2[ 282 ] <= dot_product_0_1;
+                232 : a2[ 281 ] <= dot_product_0_1;
+                233 : a2[ 280 ] <= dot_product_0_1;
+                234 : a2[ 279 ] <= dot_product_0_1;
+                235 : a2[ 278 ] <= dot_product_0_1;
+                236 : a2[ 277 ] <= dot_product_0_1;
+                237 : a2[ 276 ] <= dot_product_0_1;
+                238 : a2[ 275 ] <= dot_product_0_1;
+                239 : a2[ 274 ] <= dot_product_0_1;
+                240 : a2[ 273 ] <= dot_product_0_1;
+                241 : a2[ 272 ] <= dot_product_0_1;
+                242 : a2[ 271 ] <= dot_product_0_1;
+                243 : a2[ 270 ] <= dot_product_0_1;
+                244 : a2[ 269 ] <= dot_product_0_1;
+                245 : a2[ 268 ] <= dot_product_0_1;
+                246 : a2[ 267 ] <= dot_product_0_1;
+                247 : a2[ 266 ] <= dot_product_0_1;
+                248 : a2[ 265 ] <= dot_product_0_1;
+                249 : a2[ 264 ] <= dot_product_0_1;
+                250 : a2[ 263 ] <= dot_product_0_1;
+                251 : a2[ 262 ] <= dot_product_0_1;
+                252 : a2[ 261 ] <= dot_product_0_1;
+                253 : a2[ 260 ] <= dot_product_0_1;
+                254 : a2[ 259 ] <= dot_product_0_1;
+                255 : a2[ 258 ] <= dot_product_0_1;
+                256 : a2[ 257 ] <= dot_product_0_1;
+                257 : a2[ 256 ] <= dot_product_0_1;
+                258 : a2[ 255 ] <= dot_product_0_1;
+                259 : a2[ 254 ] <= dot_product_0_1;
+                260 : a2[ 253 ] <= dot_product_0_1;
+                261 : a2[ 252 ] <= dot_product_0_1;
+                262 : a2[ 251 ] <= dot_product_0_1;
+                263 : a2[ 250 ] <= dot_product_0_1;
+                264 : a2[ 249 ] <= dot_product_0_1;
+                265 : a2[ 248 ] <= dot_product_0_1;
+                266 : a2[ 247 ] <= dot_product_0_1;
+                267 : a2[ 246 ] <= dot_product_0_1;
+                268 : a2[ 245 ] <= dot_product_0_1;
+                269 : a2[ 244 ] <= dot_product_0_1;
+                270 : a2[ 243 ] <= dot_product_0_1;
+                271 : a2[ 242 ] <= dot_product_0_1;
+                272 : a2[ 241 ] <= dot_product_0_1;
+                273 : a2[ 240 ] <= dot_product_0_1;
+                274 : a2[ 239 ] <= dot_product_0_1;
+                275 : a2[ 238 ] <= dot_product_0_1;
+                276 : a2[ 237 ] <= dot_product_0_1;
+                277 : a2[ 236 ] <= dot_product_0_1;
+                278 : a2[ 235 ] <= dot_product_0_1;
+                279 : a2[ 234 ] <= dot_product_0_1;
+                280 : a2[ 233 ] <= dot_product_0_1;
+                281 : a2[ 232 ] <= dot_product_0_1;
+                282 : a2[ 231 ] <= dot_product_0_1;
+                283 : a2[ 230 ] <= dot_product_0_1;
+                284 : a2[ 229 ] <= dot_product_0_1;
+                285 : a2[ 228 ] <= dot_product_0_1;
+                286 : a2[ 227 ] <= dot_product_0_1;
+                287 : a2[ 226 ] <= dot_product_0_1;
+                288 : a2[ 225 ] <= dot_product_0_1;
+                289 : a2[ 224 ] <= dot_product_0_1;
+                290 : a2[ 223 ] <= dot_product_0_1;
+                291 : a2[ 222 ] <= dot_product_0_1;
+                292 : a2[ 221 ] <= dot_product_0_1;
+                293 : a2[ 220 ] <= dot_product_0_1;
+                294 : a2[ 219 ] <= dot_product_0_1;
+                295 : a2[ 218 ] <= dot_product_0_1;
+                296 : a2[ 217 ] <= dot_product_0_1;
+                297 : a2[ 216 ] <= dot_product_0_1;
+                298 : a2[ 215 ] <= dot_product_0_1;
+                299 : a2[ 214 ] <= dot_product_0_1;
+                300 : a2[ 213 ] <= dot_product_0_1;
+                301 : a2[ 212 ] <= dot_product_0_1;
+                302 : a2[ 211 ] <= dot_product_0_1;
+                303 : a2[ 210 ] <= dot_product_0_1;
+                304 : a2[ 209 ] <= dot_product_0_1;
+                305 : a2[ 208 ] <= dot_product_0_1;
+                306 : a2[ 207 ] <= dot_product_0_1;
+                307 : a2[ 206 ] <= dot_product_0_1;
+                308 : a2[ 205 ] <= dot_product_0_1;
+                309 : a2[ 204 ] <= dot_product_0_1;
+                310 : a2[ 203 ] <= dot_product_0_1;
+                311 : a2[ 202 ] <= dot_product_0_1;
+                312 : a2[ 201 ] <= dot_product_0_1;
+                313 : a2[ 200 ] <= dot_product_0_1;
+                314 : a2[ 199 ] <= dot_product_0_1;
+                315 : a2[ 198 ] <= dot_product_0_1;
+                316 : a2[ 197 ] <= dot_product_0_1;
+                317 : a2[ 196 ] <= dot_product_0_1;
+                318 : a2[ 195 ] <= dot_product_0_1;
+                319 : a2[ 194 ] <= dot_product_0_1;
+                320 : a2[ 193 ] <= dot_product_0_1;
+                321 : a2[ 192 ] <= dot_product_0_1;
+                322 : a2[ 191 ] <= dot_product_0_1;
+                323 : a2[ 190 ] <= dot_product_0_1;
+                324 : a2[ 189 ] <= dot_product_0_1;
+                325 : a2[ 188 ] <= dot_product_0_1;
+                326 : a2[ 187 ] <= dot_product_0_1;
+                327 : a2[ 186 ] <= dot_product_0_1;
+                328 : a2[ 185 ] <= dot_product_0_1;
+                329 : a2[ 184 ] <= dot_product_0_1;
+                330 : a2[ 183 ] <= dot_product_0_1;
+                331 : a2[ 182 ] <= dot_product_0_1;
+                332 : a2[ 181 ] <= dot_product_0_1;
+                333 : a2[ 180 ] <= dot_product_0_1;
+                334 : a2[ 179 ] <= dot_product_0_1;
+                335 : a2[ 178 ] <= dot_product_0_1;
+                336 : a2[ 177 ] <= dot_product_0_1;
+                337 : a2[ 176 ] <= dot_product_0_1;
+                338 : a2[ 175 ] <= dot_product_0_1;
+                339 : a2[ 174 ] <= dot_product_0_1;
+                340 : a2[ 173 ] <= dot_product_0_1;
+                341 : a2[ 172 ] <= dot_product_0_1;
+                342 : a2[ 171 ] <= dot_product_0_1;
+                343 : a2[ 170 ] <= dot_product_0_1;
+                344 : a2[ 169 ] <= dot_product_0_1;
+                345 : a2[ 168 ] <= dot_product_0_1;
+                346 : a2[ 167 ] <= dot_product_0_1;
+                347 : a2[ 166 ] <= dot_product_0_1;
+                348 : a2[ 165 ] <= dot_product_0_1;
+                349 : a2[ 164 ] <= dot_product_0_1;
+                350 : a2[ 163 ] <= dot_product_0_1;
+                351 : a2[ 162 ] <= dot_product_0_1;
+                352 : a2[ 161 ] <= dot_product_0_1;
+                353 : a2[ 160 ] <= dot_product_0_1;
+                354 : a2[ 159 ] <= dot_product_0_1;
+                355 : a2[ 158 ] <= dot_product_0_1;
+                356 : a2[ 157 ] <= dot_product_0_1;
+                357 : a2[ 156 ] <= dot_product_0_1;
+                358 : a2[ 155 ] <= dot_product_0_1;
+                359 : a2[ 154 ] <= dot_product_0_1;
+                360 : a2[ 153 ] <= dot_product_0_1;
+                361 : a2[ 152 ] <= dot_product_0_1;
+                362 : a2[ 151 ] <= dot_product_0_1;
+                363 : a2[ 150 ] <= dot_product_0_1;
+                364 : a2[ 149 ] <= dot_product_0_1;
+                365 : a2[ 148 ] <= dot_product_0_1;
+                366 : a2[ 147 ] <= dot_product_0_1;
+                367 : a2[ 146 ] <= dot_product_0_1;
+                368 : a2[ 145 ] <= dot_product_0_1;
+                369 : a2[ 144 ] <= dot_product_0_1;
+                370 : a2[ 143 ] <= dot_product_0_1;
+                371 : a2[ 142 ] <= dot_product_0_1;
+                372 : a2[ 141 ] <= dot_product_0_1;
+                373 : a2[ 140 ] <= dot_product_0_1;
+                374 : a2[ 139 ] <= dot_product_0_1;
+                375 : a2[ 138 ] <= dot_product_0_1;
+                376 : a2[ 137 ] <= dot_product_0_1;
+                377 : a2[ 136 ] <= dot_product_0_1;
+                378 : a2[ 135 ] <= dot_product_0_1;
+                379 : a2[ 134 ] <= dot_product_0_1;
+                380 : a2[ 133 ] <= dot_product_0_1;
+                381 : a2[ 132 ] <= dot_product_0_1;
+                382 : a2[ 131 ] <= dot_product_0_1;
+                383 : a2[ 130 ] <= dot_product_0_1;
+                384 : a2[ 129 ] <= dot_product_0_1;
+                385 : a2[ 128 ] <= dot_product_0_1;
+                386 : a2[ 127 ] <= dot_product_0_1;
+                387 : a2[ 126 ] <= dot_product_0_1;
+                388 : a2[ 125 ] <= dot_product_0_1;
+                389 : a2[ 124 ] <= dot_product_0_1;
+                390 : a2[ 123 ] <= dot_product_0_1;
+                391 : a2[ 122 ] <= dot_product_0_1;
+                392 : a2[ 121 ] <= dot_product_0_1;
+                393 : a2[ 120 ] <= dot_product_0_1;
+                394 : a2[ 119 ] <= dot_product_0_1;
+                395 : a2[ 118 ] <= dot_product_0_1;
+                396 : a2[ 117 ] <= dot_product_0_1;
+                397 : a2[ 116 ] <= dot_product_0_1;
+                398 : a2[ 115 ] <= dot_product_0_1;
+                399 : a2[ 114 ] <= dot_product_0_1;
+                400 : a2[ 113 ] <= dot_product_0_1;
+                401 : a2[ 112 ] <= dot_product_0_1;
+                402 : a2[ 111 ] <= dot_product_0_1;
+                403 : a2[ 110 ] <= dot_product_0_1;
+                404 : a2[ 109 ] <= dot_product_0_1;
+                405 : a2[ 108 ] <= dot_product_0_1;
+                406 : a2[ 107 ] <= dot_product_0_1;
+                407 : a2[ 106 ] <= dot_product_0_1;
+                408 : a2[ 105 ] <= dot_product_0_1;
+                409 : a2[ 104 ] <= dot_product_0_1;
+                410 : a2[ 103 ] <= dot_product_0_1;
+                411 : a2[ 102 ] <= dot_product_0_1;
+                412 : a2[ 101 ] <= dot_product_0_1;
+                413 : a2[ 100 ] <= dot_product_0_1;
+                414 : a2[ 99 ] <= dot_product_0_1;
+                415 : a2[ 98 ] <= dot_product_0_1;
+                416 : a2[ 97 ] <= dot_product_0_1;
+                417 : a2[ 96 ] <= dot_product_0_1;
+                418 : a2[ 95 ] <= dot_product_0_1;
+                419 : a2[ 94 ] <= dot_product_0_1;
+                420 : a2[ 93 ] <= dot_product_0_1;
+                421 : a2[ 92 ] <= dot_product_0_1;
+                422 : a2[ 91 ] <= dot_product_0_1;
+                423 : a2[ 90 ] <= dot_product_0_1;
+                424 : a2[ 89 ] <= dot_product_0_1;
+                425 : a2[ 88 ] <= dot_product_0_1;
+                426 : a2[ 87 ] <= dot_product_0_1;
+                427 : a2[ 86 ] <= dot_product_0_1;
+                428 : a2[ 85 ] <= dot_product_0_1;
+                429 : a2[ 84 ] <= dot_product_0_1;
+                430 : a2[ 83 ] <= dot_product_0_1;
+                431 : a2[ 82 ] <= dot_product_0_1;
+                432 : a2[ 81 ] <= dot_product_0_1;
+                433 : a2[ 80 ] <= dot_product_0_1;
+                434 : a2[ 79 ] <= dot_product_0_1;
+                435 : a2[ 78 ] <= dot_product_0_1;
+                436 : a2[ 77 ] <= dot_product_0_1;
+                437 : a2[ 76 ] <= dot_product_0_1;
+                438 : a2[ 75 ] <= dot_product_0_1;
+                439 : a2[ 74 ] <= dot_product_0_1;
+                440 : a2[ 73 ] <= dot_product_0_1;
+                441 : a2[ 72 ] <= dot_product_0_1;
+                442 : a2[ 71 ] <= dot_product_0_1;
+                443 : a2[ 70 ] <= dot_product_0_1;
+                444 : a2[ 69 ] <= dot_product_0_1;
+                445 : a2[ 68 ] <= dot_product_0_1;
+                446 : a2[ 67 ] <= dot_product_0_1;
+                447 : a2[ 66 ] <= dot_product_0_1;
+                448 : a2[ 65 ] <= dot_product_0_1;
+                449 : a2[ 64 ] <= dot_product_0_1;
+                450 : a2[ 63 ] <= dot_product_0_1;
+                451 : a2[ 62 ] <= dot_product_0_1;
+                452 : a2[ 61 ] <= dot_product_0_1;
+                453 : a2[ 60 ] <= dot_product_0_1;
+                454 : a2[ 59 ] <= dot_product_0_1;
+                455 : a2[ 58 ] <= dot_product_0_1;
+                456 : a2[ 57 ] <= dot_product_0_1;
+                457 : a2[ 56 ] <= dot_product_0_1;
+                458 : a2[ 55 ] <= dot_product_0_1;
+                459 : a2[ 54 ] <= dot_product_0_1;
+                460 : a2[ 53 ] <= dot_product_0_1;
+                461 : a2[ 52 ] <= dot_product_0_1;
+                462 : a2[ 51 ] <= dot_product_0_1;
+                463 : a2[ 50 ] <= dot_product_0_1;
+                464 : a2[ 49 ] <= dot_product_0_1;
+                465 : a2[ 48 ] <= dot_product_0_1;
+                466 : a2[ 47 ] <= dot_product_0_1;
+                467 : a2[ 46 ] <= dot_product_0_1;
+                468 : a2[ 45 ] <= dot_product_0_1;
+                469 : a2[ 44 ] <= dot_product_0_1;
+                470 : a2[ 43 ] <= dot_product_0_1;
+                471 : a2[ 42 ] <= dot_product_0_1;
+                472 : a2[ 41 ] <= dot_product_0_1;
+                473 : a2[ 40 ] <= dot_product_0_1;
+                474 : a2[ 39 ] <= dot_product_0_1;
+                475 : a2[ 38 ] <= dot_product_0_1;
+                476 : a2[ 37 ] <= dot_product_0_1;
+                477 : a2[ 36 ] <= dot_product_0_1;
+                478 : a2[ 35 ] <= dot_product_0_1;
+                479 : a2[ 34 ] <= dot_product_0_1;
+                480 : a2[ 33 ] <= dot_product_0_1;
+                481 : a2[ 32 ] <= dot_product_0_1;
+                482 : a2[ 31 ] <= dot_product_0_1;
+                483 : a2[ 30 ] <= dot_product_0_1;
+                484 : a2[ 29 ] <= dot_product_0_1;
+                485 : a2[ 28 ] <= dot_product_0_1;
+                486 : a2[ 27 ] <= dot_product_0_1;
+                487 : a2[ 26 ] <= dot_product_0_1;
+                488 : a2[ 25 ] <= dot_product_0_1;
+                489 : a2[ 24 ] <= dot_product_0_1;
+                490 : a2[ 23 ] <= dot_product_0_1;
+                491 : a2[ 22 ] <= dot_product_0_1;
+                492 : a2[ 21 ] <= dot_product_0_1;
+                493 : a2[ 20 ] <= dot_product_0_1;
+                494 : a2[ 19 ] <= dot_product_0_1;
+                495 : a2[ 18 ] <= dot_product_0_1;
+                496 : a2[ 17 ] <= dot_product_0_1;
+                497 : a2[ 16 ] <= dot_product_0_1;
+                498 : a2[ 15 ] <= dot_product_0_1;
+                499 : a2[ 14 ] <= dot_product_0_1;
+                500 : a2[ 13 ] <= dot_product_0_1;
+                501 : a2[ 12 ] <= dot_product_0_1;
+                502 : a2[ 11 ] <= dot_product_0_1;
+                503 : a2[ 10 ] <= dot_product_0_1;
+                504 : a2[ 9 ] <= dot_product_0_1;
+                505 : a2[ 8 ] <= dot_product_0_1;
+                506 : a2[ 7 ] <= dot_product_0_1;
+                507 : a2[ 6 ] <= dot_product_0_1;
+                508 : a2[ 5 ] <= dot_product_0_1;
+                509 : a2[ 4 ] <= dot_product_0_1;
+                510 : a2[ 3 ] <= dot_product_0_1;
+                511 : a2[ 2 ] <= dot_product_0_1;
+                512 : a2[ 1 ] <= dot_product_0_1;
+                513 : a2[ 0 ] <= dot_product_0_1;
+            endcase
+        end
+    end
+
+
+    always @(posedge clk, negedge rst_n) begin
+        if(!rst_n)
+            a2_compute_Done <= 0;
+        else if(addra == 513)
+            a2_compute_Done <= 1;
+        else
+            a2_compute_Done <= 0;
+    end
+endmodule
