@@ -6,7 +6,7 @@ Keras: 2.3.1
 Tensorflow: 2.1.0
 Python: 3.6
 ## Introduction
-Binary Neural Network is a kind of neural network that all weights and activations are set to 1 or -1. It might look unrealiable at the first glance because massive floating number computation and pricy GPU usage is kinda like the landmark architecture of deep learning, but for networks with only 1 and -1? NO WAY!!
+Binary Neural Network is a kind of neural network that all weights and activations are set to 1 or -1. It might look unrealiable at the first glance because massive floating number computation and pricy GPU is kinda like the landmark architecture of deep learning, but for networks with only 1 and -1? NO WAY!!
 
 However, the loss is actually amazingly low according to the [scientific research](https://www.semanticscholar.org/paper/Binarized-Neural-Networks%3A-Training-Deep-Neural-and-Courbariaux-Hubara/6eecc808d4c74e7d0d7ef6b8a4112c985ced104d?p2df).
 Thus Binary Neural Network is suitable for implementing on edge device especially on FPGA due to the trade-off between its limited capacity and the capability of speedy gate-level computation.
@@ -31,6 +31,7 @@ Forward propagation has activation function involved, whereas in backward propag
 * To store w3, I used a single port BROM, which has width 512 and depth 10<br>
 All of them have read latency 2 clk cycles
 ![diagram](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/diagram.png)
+* Particularly, My board used a 74HC595 chip to drive the nixie tube
 * Also, Pyserial has some unexpected flaws so I was using a uart tool to send the bytes, it should also works for other tools such as Serial Port Utility
 
 ## Results
