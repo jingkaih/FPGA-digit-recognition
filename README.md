@@ -28,12 +28,12 @@ Forward propagation has activation function involved, whereas in backward propag
 * To store image, I used a simple dual port BRAM, which has width 28 and depth 32
 * To store w1, I used a single port BROM, which has width 784 and depth 512
 * To store w2, I used a single port BROM, which has width 512 and depth 512
-* To store w3, I used a single port BROM, which has width 512 and depth 10
+* To store w3, I used a single port BROM, which has width 512 and depth 10<br>
 All of them have read latency 2 clk cycles
 ![diagram](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/diagram.png)
 * Also, Pyserial has some unexpected flaws so I was using a uart tool to send the bytes, it should also works for other tools such as Serial Port Utility
 
-## Result
+## Results
 ![1](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/1.jpg)
 ![2](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/2.jpg)
 ![3](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/3.jpg)
