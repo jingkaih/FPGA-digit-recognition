@@ -6,8 +6,8 @@ Keras: 2.3.1
 Tensorflow: 2.1.0
 Python: 3.6
 ## Introduction
-Binary Neural Network is a kind of neural network that all weights and activations are set to 1 or -1. It might look unrealiable at the first glance because massive floating number computation and pricy GPU usage is kinda like the landmark architecture of deep learning.
-The loss is actually amazingly low according to the scientific research.
+Binary Neural Network is a kind of neural network that all weights and activations are set to 1 or -1. It might look unrealiable at the first glance because massive floating number computation and pricy GPU usage is kinda like the landmark architecture of deep learning, but for networks with only 1 and -1? NO WAY!!
+The loss is actually amazingly low according to the [scientific research](https://www.semanticscholar.org/paper/Binarized-Neural-Networks%3A-Training-Deep-Neural-and-Courbariaux-Hubara/6eecc808d4c74e7d0d7ef6b8a4112c985ced104d?p2df).
 Binary Neural Network is suitable for implementing on edge device especially on FPGA due to the trade-off between its limited capacity and the capability of speedy gate-level computation.
 I'm giving a simple demo on how we can use relatively cheaper FPGA (i.e. with no embedded ARM processor) to do forward propagation and predict the test set of MNIST handwritten digits.
 ## Quick start
