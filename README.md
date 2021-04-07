@@ -32,7 +32,7 @@ Forward propagation has activation function involved, whereas in backward propag
 All of them have read latency 2 clk cycles
 ![diagram](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/diagram.png)
 * Particularly, My board used a 74HC595 chip to drive the nixie tube
-* Also, Pyserial has some unexpected flaws so I was using a uart tool to send the bytes, it should also works for other tools such as Serial Port Utility
+* Also, Pyserial has some unexpected flaws so I was using a uart tool to send the bytes, it should also work for other tools such as Serial Port Utility
 
 ## Results
 ![1](https://github.com/jingkaih/FPGA-digit-recognition/blob/master/img/1.jpg)
